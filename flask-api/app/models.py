@@ -7,7 +7,7 @@ class Story(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
-    status = db.Column(db.String(20), default='published')  
+    status = db.Column(db.String(20), default='published') 
     start_page_id = db.Column(db.Integer, db.ForeignKey('pages.id'), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     illustration = db.Column(db.String(500), nullable=True)  
@@ -38,7 +38,13 @@ class Page(db.Model):
     ending_label = db.Column(db.String(100), nullable=True)  
     illustration = db.Column(db.String(500), nullable=True)  
     
-    choices = db.relationship('Choice', backref='page', lazy=True, cascade='all, delete-orphan')
+    choices = db.relationship(
+        'Choice', 
+        backref='page', 
+        lazy=True, 
+        cascade='all, delete-orphan',
+        foreign_keys='Choice.page_id' 
+    )
     
     def to_dict(self):
         return {
@@ -59,8 +65,8 @@ class Choice(db.Model):
     page_id = db.Column(db.Integer, db.ForeignKey('pages.id'), nullable=False)
     text = db.Column(db.String(200), nullable=False)
     next_page_id = db.Column(db.Integer, db.ForeignKey('pages.id'), nullable=False)
-    requires_dice_roll = db.Column(db.Boolean, default=False)  # Level 18
-    dice_threshold = db.Column(db.Integer, nullable=True)  # Level 18
+    requires_dice_roll = db.Column(db.Boolean, default=False)
+    dice_threshold = db.Column(db.Integer, nullable=True)
     
     next_page = db.relationship('Page', foreign_keys=[next_page_id])
     

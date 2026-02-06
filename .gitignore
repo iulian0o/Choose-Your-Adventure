@@ -7,3 +7,7 @@ __pycache__/
 env/
 venv/
 ENV/
+
+# Flask
+instance/
+.pytest_cache/

@@ -27,7 +27,7 @@ def get_story(story_id):
 
 @bp.route("/stories", methods=["POST"])
 def create_story():
-    """Create a new story"""
+    # Create a new story
     data = request.json
 
     story = Story(
@@ -45,7 +45,7 @@ def create_story():
 
 @bp.route("/stories/<int:story_id>", methods=["PUT"])
 def update_story(story_id):
-    """Update an existing story"""
+    # Update an existing story
     story = Story.query.get_or_404(story_id)
     data = request.json
 
@@ -62,7 +62,7 @@ def update_story(story_id):
 
 @bp.route("/stories/<int:story_id>", methods=["DELETE"])
 def delete_story(story_id):
-    """Delete a story"""
+    # Delete a story
     story = Story.query.get_or_404(story_id)
 
     Page.query.filter_by(story_id=story_id).delete()
@@ -75,7 +75,7 @@ def delete_story(story_id):
 
 @bp.route("/stories/<int:story_id>/start", methods=["GET"])
 def get_story_start(story_id):
-    """Get the starting page of a story"""
+    # Get the starting page of a story
     story = Story.query.get_or_404(story_id)
 
     if not story.start_page_id:
@@ -88,14 +88,14 @@ def get_story_start(story_id):
 
 @bp.route("/pages/<int:page_id>", methods=["GET"])
 def get_page(page_id):
-    """Get a specific page with its choices"""
+    # Get a specific page with its choices
     page = Page.query.get_or_404(page_id)
     return jsonify(page.to_dict())
 
 
 @bp.route("/stories/<int:story_id>/pages", methods=["POST"])
 def create_page(story_id):
-    """Create a new page for a story"""
+    # Create a new page for a story
     story = Story.query.get_or_404(story_id)
     data = request.json
 
@@ -119,7 +119,7 @@ def create_page(story_id):
 
 @bp.route("/pages/<int:page_id>", methods=["PUT"])
 def update_page(page_id):
-    """Update a page"""
+    # Update a page
     page = Page.query.get_or_404(page_id)
     data = request.json
 
@@ -135,7 +135,7 @@ def update_page(page_id):
 
 @bp.route("/pages/<int:page_id>", methods=["DELETE"])
 def delete_page(page_id):
-    """Delete a page"""
+    # Delete a page
     page = Page.query.get_or_404(page_id)
 
     db.session.delete(page)
@@ -146,7 +146,7 @@ def delete_page(page_id):
 
 @bp.route("/pages/<int:page_id>/choices", methods=["POST"])
 def create_choice(page_id):
-    """Create a new choice for a page"""
+    # Create a new choice for a page
     page = Page.query.get_or_404(page_id)
     data = request.json
 
@@ -166,7 +166,7 @@ def create_choice(page_id):
 
 @bp.route("/choices/<int:choice_id>", methods=["PUT"])
 def update_choice(choice_id):
-    """Update a choice"""
+    # Update a choice
     choice = Choice.query.get_or_404(choice_id)
     data = request.json
 
@@ -184,7 +184,7 @@ def update_choice(choice_id):
 
 @bp.route("/choices/<int:choice_id>", methods=["DELETE"])
 def delete_choice(choice_id):
-    """Delete a choice"""
+    # Delete a choice
     choice = Choice.query.get_or_404(choice_id)
 
     db.session.delete(choice)
@@ -195,7 +195,7 @@ def delete_choice(choice_id):
 
 @bp.route("/stories/<int:story_id>/tree", methods=["GET"])
 def get_story_tree(story_id):
-    """Get the full story tree for visualization (Level 18)"""
+    # Get the full story tree for visualization
     story = Story.query.get_or_404(story_id)
     pages = Page.query.filter_by(story_id=story_id).all()
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Choose Your Own Adventure{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'stories:story_list' %}" class="nav-brand">
+                <span class="brand-icon">📖</span>
+                CYOA Stories
+            </a>
+            
+            <div class="nav-links">
+                <a href="{% url 'stories:story_list' %}">Browse</a>
+                <a href="{% url 'stories:search' %}">Search</a>
+                <a href="{% url 'stories:statistics' %}">Statistics</a>
+                
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <a href="{% url 'stories:moderate_stories' %}" class="nav-admin">Moderate</a>
+                        <a href="{% url 'stories:view_reports' %}" class="nav-admin">Reports</a>
+                    {% endif %}
+                    
+                    <a href="{% url 'stories:my_stories' %}">My Stories</a>
+                    <a href="{% url 'stories:my_history' %}">My History</a>
+                    <a href="{% url 'stories:create_story' %}" class="nav-create">Create Story</a>
+                    
+                    <div class="nav-user">
+                        <span class="user-icon">👤</span>
+                        <span>{{ user.username }}</span>
+                        <a href="{% url 'stories:logout' %}" class="nav-logout">Logout</a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'stories:login' %}" class="nav-login">Login</a>
+                    <a href="{% url 'stories:register' %}" class="nav-register">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                    <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Choose Your Own Adventure Platform</p>
+            <p>Built with Flask & Django | Computer Science Project</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

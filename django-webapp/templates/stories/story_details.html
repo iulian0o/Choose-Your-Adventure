@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ story.title }} - CYOA{% endblock %}
+
+{% block content %}
+<div class="story-detail-container">
+    <div class="story-detail-header">
+        <h1>{{ story.title }}</h1>
+        <div class="story-detail-meta">
+            <span class="status-badge status-{{ story.status }}">{{ story.status|title }}</span>
+            {% if avg_rating > 0 %}
+                <span class="rating-display">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= avg_rating %}
+                            <span class="star star-filled">★</span>
+                        {% else %}
+                            <span class="star">☆</span>
+                        {% endif %}
+                    {% endfor %}
+                    <span class="rating-text">{{ avg_rating }} ({{ rating_count }} ratings)</span>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="story-detail-content">
+        <div class="story-description">
+            <h3>About This Story</h3>
+            <p>{{ story.description }}</p>
+        </div>
+
+        <div class="story-actions-large">
+            <a href="{% url 'stories:play_story' story.id %}" class="btn btn-primary btn-large">
+                🎮 Start Adventure
+            </a>
+            <a href="{% url 'stories:story_tree' story.id %}" class="btn btn-secondary">
+                🌳 View Story Map
+            </a>
+        </div>
+
+        {% if user.is_authenticated %}
+            <div class="rating-section">
+                <h3>Rate This Story</h3>
+                <form method="post" action="{% url 'stories:rate_story' story.id %}" class="rating-form">
+                    {% csrf_token %}
+                    <div class="star-rating-input">
+                        {% for i in "12345" %}
+                            <input type="radio" name="score" value="{{ forloop.counter }}" id="star{{ forloop.counter }}"
+                                   {% if user_rating and user_rating.score == forloop.counter %}checked{% endif %}>
+                            <label for="star{{ forloop.counter }}">★</label>
+                        {% endfor %}
+                    </div>
+                    <textarea name="comment" placeholder="Share your thoughts... (optional)" class="rating-comment">{% if user_rating %}{{ user_rating.comment }}{% endif %}</textarea>
+                    <button type="submit" class="btn btn-primary">Submit Rating</button>
+                </form>
+            </div>
+
+            <div class="report-section">
+                <button class="btn btn-warning btn-small" onclick="toggleReportForm()">⚠️ Report Story</button>
+                <form method="post" action="{% url 'stories:report_story' story.id %}" class="report-form" id="reportForm" style="display:none;">
+                    {% csrf_token %}
+                    <select name="reason" required class="form-select">
+                        <option value="">Select reason...</option>
+                        <option value="inappropriate">Inappropriate Content</option>
+                        <option value="spam">Spam</option>
+                        <option value="offensive">Offensive Language</option>
+                        <option value="broken">Broken/Unplayable</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <textarea name="description" required placeholder="Describe the issue..." class="form-textarea"></textarea>
+                    <button type="submit" class="btn btn-warning">Submit Report</button>
+                </form>
+            </div>
+        {% endif %}
+
+        <div class="statistics-panel">
+            <h3>Statistics</h3>
+            <div class="stat-item">
+                <span class="stat-label">Total Plays:</span>
+                <span class="stat-value">{{ total_plays }}</span>
+            </div>
+
+            {% if ending_distribution %}
+                <h4>Ending Distribution</h4>
+                <div class="ending-stats">
+                    {% for ending in ending_distribution %}
+                        <div class="ending-stat-item">
+                            <div class="ending-label">{{ ending.ending_label }}</div>
+                            <div class="ending-bar-container">
+                                <div class="ending-bar" style="width: {{ ending.percentage }}%;"></div>
+                            </div>
+                            <div class="ending-percentage">{{ ending.percentage }}% ({{ ending.count }} plays)</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        {% if ratings %}
+            <div class="reviews-section">
+                <h3>Community Reviews</h3>
+                {% for rating in ratings %}
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="review-user">{{ rating.user.username }}</span>
+                            <span class="review-rating">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= rating.score %}★{% else %}☆{% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="review-date">{{ rating.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        {% if rating.comment %}
+                            <p class="review-comment">{{ rating.comment }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleReportForm() {
+    const form = document.getElementById('reportForm');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+{% endblock %}

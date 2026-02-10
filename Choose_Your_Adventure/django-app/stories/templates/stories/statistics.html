@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Statistics - NAHB{% endblock %}
+
+{% block content %}
+<h1>Story Statistics</h1>
+
+{% for story in stories %}
+<div class="card">
+    <h2>{{ story.title }}</h2>
+    <p>Total Plays: {{ story.play_count }}</p>
+    
+    <h3>Ending Distribution</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Ending Page</th>
+                <th>Count</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ending in story.endings %}
+            <tr>
+                <td>Page #{{ ending.page_id }}</td>
+                <td>{{ ending.count }}</td>
+                <td>{{ ending.percentage }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% empty %}
+<p>No plays recorded yet.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Page - NAHB{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Create New Page</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div>
+            <label for="text">Page Text:</label>
+            <textarea id="text" name="text" required></textarea>
+        </div>
+        
+        <div>
+            <label>
+                <input type="checkbox" name="is_ending">
+                This is an ending page
+            </label>
+        </div>
+        
+        <div>
+            <label for="ending_label">Ending Label (if ending):</label>
+            <input type="text" id="ending_label" name="ending_label">
+        </div>
+        
+        <div>
+            <button type="submit" class="btn btn-success">Create Page</button>
+            <a href="{% url 'story_edit' story_id %}" class="btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

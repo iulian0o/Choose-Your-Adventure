@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Author Dashboard - NAHB{% endblock %}
+
+{% block content %}
+<h1>Author Dashboard</h1>
+
+<a href="{% url 'story_create' %}" class="btn btn-success" style="margin-bottom: 2rem;">Create New Story</a>
+
+<div class="story-grid">
+    {% for story in stories %}
+    <div class="story-card">
+        <h3>{{ story.title }}</h3>
+        <p>{{ story.description }}</p>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <a href="{% url 'story_edit' story.id %}" class="btn">Edit</a>
+            <form method="post" action="{% url 'story_delete' story.id %}" style="display: inline;" 
+                  onsubmit="return confirm('Are you sure you want to delete this story?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p>No stories created yet. Create your first story!</p>
+    {% endfor %}
+</div>
+{% endblock %}

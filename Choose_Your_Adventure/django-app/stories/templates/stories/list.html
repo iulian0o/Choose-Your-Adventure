@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}All Stories - NAHB{% endblock %}
+
+{% block content %}
+<h1>Available Stories</h1>
+
+<div class="story-grid">
+    {% for story in stories %}
+    <div class="story-card">
+        <h3>{{ story.title }}</h3>
+        <p>{{ story.description }}</p>
+        <a href="{% url 'story_detail' story.id %}" class="btn">View Details</a>
+        <a href="{% url 'play_story' story.id %}" class="btn btn-success">Play Story</a>
+    </div>
+    {% empty %}
+    <p>No stories available yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

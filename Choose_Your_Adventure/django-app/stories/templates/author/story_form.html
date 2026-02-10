@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Story - NAHB{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Create New Story</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        
+        <div>
+            <button type="submit" class="btn btn-success">Create Story</button>
+            <a href="{% url 'author_dashboard' %}" class="btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

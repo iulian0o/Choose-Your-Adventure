@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ story.title }} - NAHB{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ story.title }}</h1>
+    <p>{{ story.description }}</p>
+    
+    <h3>Statistics</h3>
+    <p>Total Plays: {{ total_plays }}</p>
+    
+    {% if endings_stats %}
+    <h4>Ending Distribution:</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Ending Page ID</th>
+                <th>Times Reached</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ending in endings_stats %}
+            <tr>
+                <td>{{ ending.ending_page_id }}</td>
+                <td>{{ ending.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    
+    <div style="margin-top: 2rem;">
+        <a href="{% url 'play_story' story.id %}" class="btn btn-success">Play This Story</a>
+        <a href="{% url 'story_list' %}" class="btn">Back to Stories</a>
+    </div>
+</div>
+{% endblock %}

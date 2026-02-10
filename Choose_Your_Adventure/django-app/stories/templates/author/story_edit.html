@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit {{ story.title }} - NAHB{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Edit Story: {{ story.title }}</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="{{ story.title }}" required>
+        </div>
+        
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required>{{ story.description }}</textarea>
+        </div>
+        
+        <div>
+            <button type="submit" class="btn btn-success">Update Story</button>
+            <a href="{% url 'author_dashboard' %}" class="btn">Back to Dashboard</a>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Manage Pages</h2>
+    <a href="{% url 'page_create' story.id %}" class="btn btn-success">Add New Page</a>
+    
+    <p style="margin-top: 1rem; color: #666;">
+        Page management interface would list all pages here with edit/delete options.
+        For Level 10, you can add pages via Postman and see them when playing.
+    </p>
+</div>
+{% endblock %}

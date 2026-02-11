@@ -18,4 +18,5 @@ urlpatterns = [
     path('author/story/<int:story_id>/delete/', views.story_delete, name='story_delete'),
     path('author/story/<int:story_id>/page/create/', views.page_create, name='page_create'),
     path('author/page/<int:page_id>/choice/create/', views.choice_create, name='choice_create'),
+    path('author/story/<int:story_id>/publish/', views.story_publish, name='story_publish'),
 ]

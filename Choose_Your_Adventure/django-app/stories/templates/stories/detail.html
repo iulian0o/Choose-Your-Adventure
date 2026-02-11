@@ -1,29 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ story.title }} - NAHB{% endblock %}
-
 {% block content %}
 <div class="card">
     <h1>{{ story.title }}</h1>
     <p>{{ story.description }}</p>
     
     <h3>Statistics</h3>
-    <p>Total Plays: {{ total_plays }}</p>
+    <p><strong>Total Plays:</strong> {{ total_plays }}</p>
     
     {% if endings_stats %}
     <h4>Ending Distribution:</h4>
     <table>
         <thead>
             <tr>
-                <th>Ending Page ID</th>
+                <th>Ending</th>
                 <th>Times Reached</th>
+                <th>Percentage</th>
             </tr>
         </thead>
         <tbody>
             {% for ending in endings_stats %}
             <tr>
-                <td>{{ ending.ending_page_id }}</td>
+                <td>{{ ending.label }}</td>
                 <td>{{ ending.count }}</td>
+                <td>{{ ending.percentage }}%</td>
             </tr>
             {% endfor %}
         </tbody>

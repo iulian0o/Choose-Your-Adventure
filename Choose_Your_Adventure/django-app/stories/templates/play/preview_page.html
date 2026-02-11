@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+        <strong>PREVIEW MODE</strong> - Statistics are not being recorded
+    </div>
+    
+    <div style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 2rem;">
+        {{ page.text }}
+    </div>
+    
+    {% if page.is_ending %}
+        <div style="padding: 1rem; background: #d4edda; border-radius: 5px; margin-bottom: 2rem;">
+            <h3>The End{% if page.ending_label %}: {{ page.ending_label }}{% endif %}</h3>
+        </div>
+        <a href="{% url 'author_dashboard' %}" class="btn">Back to Dashboard</a>
+        <a href="{% url 'preview_story' story_id %}" class="btn btn-success">Preview Again</a>
+    {% else %}
+        <h3>What will you do?</h3>
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            {% for choice in page.choices %}
+            <a href="{% url 'preview_page' story_id choice.next_page_id %}" 
+               class="btn" 
+               style="text-align: left;">
+                {{ choice.text }}
+            </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
